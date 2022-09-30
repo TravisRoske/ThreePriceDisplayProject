@@ -3,28 +3,6 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 
-//creates a front view side panel
-var elem = document.createElement('canvas')
-elem.style.height = "50px";   //idk why these don't work
-elem.style.width = "50px";
-elem.style.scale = .65         //idk why I need this otherwise the element won't appear...
-elem.style.margin = "8px";
-elem.style.border = "2px solid green";
-
-document.body.appendChild(elem);
-
-const camera2 = new THREE.PerspectiveCamera(5, elem.width / elem.height, 0.1, 100)
-camera2.position.set (5, 80, 0)
-camera2.rotation.x = -1.5708
-const renderer2 = new THREE.WebGLRenderer({
-    canvas: elem
-})
-renderer2.setSize(elem.width, elem.height)
-// renderer2.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-///
-
-
-
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -135,8 +113,6 @@ const tick = () =>
 
     // Render
     renderer.render(scene, camera)
-    renderer2.render(scene, camera2)
-
 
 
     //BTC update
@@ -160,12 +136,8 @@ tick()
 
 
 
-import { FontLoader } from './myFontLoader.js'  //only exists locally in src file, not to be found elsewhere
-import { TextGeometry } from './TextGeometry.js'
-import { BoxGeometry } from 'three'
 
 
-//  import {FontLoader} from '../node_modules/three/examples/jsm/loaders/FontLoader'
 
 
 const loader = new FontLoader();
@@ -205,119 +177,3 @@ const font = loader.load(
 
 
 
-
-
-
-let bitcoin = new THREE.Mesh()
-scene.add(bitcoin)
-bitcoin.scale.set(.0045,.0045,.0045)
-bitcoin.position.set(0,1,0)
-
-function getBitcoin(){
-    console.log('bitcoin called')
-    let url = `https://api.coincap.io/v2/assets/bitcoin`
-
-    fetch(url,
-    {method: 'GET',
-    redirect: 'follow'})
-    .then(function(responce) {
-        return responce.json()
-    })
-    .then(result => {
-        let price = result.data.priceUsd
-        console.log(price)
-        
-        const font2 = loader.load(
-            'font.json', 
-        
-            // onLoad callback
-            function ( font2 ) {
-
-                const btcGeometry = new TextGeometry( `Bitcoin: ${price}`, {
-                    font: font2,
-                    size: 250,
-                    height: 70,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 8,
-                    bevelOffset: 0,
-                    bevelSegments: 5
-                } );
-                const btcMaterial = new THREE.MeshStandardMaterial()
-                btcMaterial.color = new THREE.Color(0x0000ff)
-
-                btcMaterial.transparent = true;
-                btcMaterial.opacity = .5
-
-
-                bitcoin.geometry = btcGeometry
-                bitcoin.material = btcMaterial
-            },
-        
-            // onError callback
-            function ( err ) {
-                console.log( 'An error happened' );
-            }
-        )
-    })
-    .catch(error => {
-        console.log('Error', error)
-    })
-}
-
-
-
-let ethereum = new THREE.Mesh()
-scene.add(ethereum)
-ethereum.scale.set(.0045,.0045,.0045)
-ethereum.position.set(0,-1.5,0)
-
-function getEthereum(){
-    console.log('Ethereum called')
-    let url = `https://api.coincap.io/v2/assets/ethereum`
-
-    fetch(url,
-    {method: 'GET',
-    redirect: 'follow'})
-    .then(function(responce) {
-        return responce.json()
-    })
-    .then(result => {
-        let price = result.data.priceUsd
-        console.log(price)
-        
-        const font2 = loader.load(
-            'font.json', 
-        
-            // onLoad callback
-            function ( font2 ) {
-
-                const ethereumGeometry = new TextGeometry( `Ethereum: ${price}`, {
-                    font: font2,
-                    size: 250,
-                    height: 70,
-                    curveSegments: 12,
-                    bevelEnabled: true,
-                    bevelThickness: 10,
-                    bevelSize: 8,
-                    bevelOffset: 0,
-                    bevelSegments: 5
-                } );
-                const ethereumMaterial = new THREE.MeshStandardMaterial()
-                ethereumMaterial.color = new THREE.Color(0x0000ff)
-
-                ethereum.geometry = ethereumGeometry
-                ethereum.material = ethereumMaterial
-            },
-        
-            // onError callback
-            function ( err ) {
-                console.log( 'An error happened' );
-            }
-        )
-    })
-    .catch(error => {
-        console.log('Error', error)
-    })
-}

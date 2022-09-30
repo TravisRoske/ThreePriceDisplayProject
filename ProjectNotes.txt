@@ -1,5 +1,6 @@
 Coin Viewer project
 
+
 //loading order
 	first load the lighting and background
 	then the ground plane
@@ -7,7 +8,6 @@ Coin Viewer project
 	start the loop
 		//the loop loads consoles when the api calls are returned.
 	
-
     
 
 //main loop,
