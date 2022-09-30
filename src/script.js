@@ -2,6 +2,8 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+import {ConsoleObject} from './objects/ConsoleObject.js'
+
 
 
 // Canvas
@@ -94,11 +96,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 
-///
+
 const clock = new THREE.Clock()
-///
-let counter = -5
-///
+
 
 const tick = () =>
 {
@@ -115,14 +115,14 @@ const tick = () =>
     renderer.render(scene, camera)
 
 
-    //BTC update
-    //Probably not the best timer system, but math.floor didn't work for it.
-    if(clock.elapsedTime % 5 < .5 
-        && clock.elapsedTime - counter > 4.5){
-        getBitcoin()
-        getEthereum()
-        counter = clock.elapsedTime
-    }
+
+
+    //Just put main loop in here...
+    //every time interval, make a call to the next in the list
+    //for its callback, use an update function....
+
+    //if the object doesn't exist, spawn it in and add it to scene.
+    //if it does exist, just update it???
 
 
 
@@ -136,4 +136,11 @@ tick()
 
 
 
+let consoleTest = new ConsoleObject();
+scene.add(consoleTest.mesh)
 
+
+
+let consoleTest2 = new ConsoleObject();
+scene.add(consoleTest2.mesh)
+consoleTest2.mesh.position.z = -4
