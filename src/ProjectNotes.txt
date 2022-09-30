@@ -1,0 +1,45 @@
+Coin Viewer project
+
+//loading order
+	first load the lighting and background
+	then the ground plane
+		//ground plane is repeated squares, stretch into the distance
+	start the loop
+		//the loop loads consoles when the api calls are returned.
+	
+
+    
+
+//main loop,
+	every second?, sends a new api call to a different coin in the list
+	that's it, everything else is handled anyways with the callbacks
+	in the normal js event loop
+
+
+
+//Consoles
+	Spawner
+		a new console spawns underground
+		the floor opens up, and a new console moves up
+		it's lights turn on
+	hologram init
+		once the price is loaded
+		lights turn on really bright, then lessen
+		and the text forms at the same time
+	hologram update
+		lights turn bright again and the price changes
+
+
+
+//API calls
+	send out a call in the timing loop
+	when loaded, does a check
+	if it returns a value different than the current, update the value.
+
+	run continuously in a loop in the background
+	
+
+
+//Movement
+	//wasd and mouse
+	//phone controls???
