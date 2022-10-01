@@ -4,17 +4,18 @@
 
 
 import * as THREE from 'three'
+import { HologramObject } from '../HologramObject';
 
 
 export class ConsoleObject {
 
-    constructor(name){
+    constructor(name, positionX = 0, positionZ = 0){
         this.name = name;
         this.child = null;
         
 
 ///////////////////////////////////////////////trash
-        const geometry = new THREE.BoxGeometry(2,2,2);
+        const geometry = new THREE.BoxGeometry(1,1,1);
 
         // Materials
         const material = new THREE.MeshStandardMaterial()
@@ -27,6 +28,8 @@ export class ConsoleObject {
         this.mesh = new THREE.Mesh(geometry,material)
 
         this.mesh.position.y = -2;
+        this.mesh.position.x = positionX;
+        this.mesh.position.z = positionZ;
         this.startingAnimation();
 ////////////////////////////////////////////////
 
@@ -55,12 +58,19 @@ export class ConsoleObject {
             // Update objects
             this.mesh.position.y = .4 * elapsedTime
             
-            if(this.mesh.position.y < 2)
+            if(this.mesh.position.y < 1)
                 window.requestAnimationFrame(tick)
             else 
                 return
         }
 
         tick()
+    }
+
+    spawnChild(value, font){
+        console.log("this", this.name, this.positionX, this.positionZ)
+        this.child = new HologramObject(this.name, value, font, this.mesh.position.x, this.mesh.position.z)
+
+        return this.child;
     }
 }

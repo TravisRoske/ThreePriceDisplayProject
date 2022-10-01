@@ -143,19 +143,6 @@ tick()
 
 
 
-///////////////////////////////////////////////////////////
-let consoleTest = new ConsoleObject();
-scene.add(consoleTest.mesh)
-
-
-
-let consoleTest2 = new ConsoleObject();
-scene.add(consoleTest2.mesh)
-consoleTest2.mesh.position.z = -4
-///////////////////////////////////////////////////////
-
-
-
 
 function generateTiles(cameraPosition, tileGenerateDistance = 20){
     let tiles = []
@@ -342,18 +329,18 @@ let consoleList = []
 function loadOrUpdateConsoles(name, value, font){
     console.log("You made it here!!! ", name, value)
 
+
+
 //if the consoleObject doesn't already exist.
 
     //add new console.  add mesh to scene.  the animation starts...
-    let newConsole = new ConsoleObject(name)
+    let newConsole = new ConsoleObject(name , 0, consoleList.length * -2)////////make the position of spawning dynamic
     consoleList.push( newConsole )
     scene.add(newConsole.mesh)
 
     //make new hologram object
-    let newHologram = new HologramObject(name, value, font);
-    newConsole.child = newHologram;
+    let newHologram = newConsole.spawnChild(value, font);
     scene.add(newHologram.mesh)
-
 
 
 
@@ -362,42 +349,6 @@ function loadOrUpdateConsoles(name, value, font){
     //replace object geometry with new geometry
 
 }
-
-
-
-
-const textMaterial = new THREE.MeshStandardMaterial()
-textMaterial.color = new THREE.Color(0x00ff00)
-
-
-
-
-
-// const textGeo = new TextGeometry( 'ashsdha..', {
-//     font: res,
-//     size: 250,
-//     height: 70,
-//     curveSegments: 12,
-//     bevelEnabled: true,
-//     bevelThickness: 10,
-//     bevelSize: 8,
-//     bevelOffset: 0,
-//     bevelSegments: 5
-// } );
-
-// // Mesh
-// const text = new THREE.Mesh(textGeo,textMaterial)
-// scene.add(text)
-
-// text.scale.set(.0025,.0025,.0025)
-
-
-
-
-
-//load floor
-//load console mesh
-
 
 
 

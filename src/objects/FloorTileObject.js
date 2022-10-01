@@ -8,7 +8,7 @@ export class FloorTileObject{
         this.x = posX;
         this.z = posZ;
 
-        this.geo = new THREE.PlaneGeometry(1,1)
+        this.geo = new THREE.PlaneGeometry(.9,.9)
         this.material = new THREE.MeshStandardMaterial();
 
         this.mesh = new THREE.Mesh(this.geo, this.material);

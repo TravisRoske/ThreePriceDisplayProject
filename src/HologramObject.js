@@ -10,7 +10,7 @@ textMaterial.color = new THREE.Color(0x00ff00)
 
 
 export class HologramObject {
-    constructor(name, value, font){
+    constructor(name, value, font, positionX = 0, positionZ = 0){
         this.name = name;
 
         console.log("making text object")
@@ -27,9 +27,13 @@ export class HologramObject {
             bevelSegments: 5
         } );
         const textMesh = new THREE.Mesh(geometry,textMaterial)
-        textMesh.scale.set(.0025,.0025,.0025)
+        textMesh.scale.set( .0005, .0005, .0005 )
 
         this.mesh = textMesh;
+
+        this.mesh.position.y = 2;
+        this.mesh.position.x = positionX - 1;
+        this.mesh.position.z = positionZ;
     }
 }
 
