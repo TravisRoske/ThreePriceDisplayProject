@@ -8,8 +8,9 @@ import * as THREE from 'three'
 
 export class ConsoleObject {
 
-    constructor(name, value){
+    constructor(name){
         this.name = name;
+        this.child = null;
         
 
 ///////////////////////////////////////////////trash

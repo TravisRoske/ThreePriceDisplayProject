@@ -4,7 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 import { ConsoleObject } from './objects/ConsoleObject.js'
 import { FloorTileObject } from './objects/FloorTileObject'
+import { HologramObject } from './HologramObject'
 
+"use strict"
 
 
 // Canvas
@@ -118,17 +120,9 @@ const tick = () =>
     renderer.render(scene, camera)
 
 // /////////
-    tiles = updateTiles(camera.position, tiles)
-    console.log(tiles.length, tiles[0].length)
-
-
-    //get player position
-    //generate tiles around the player position...
-    //start with position... then load in a tile every space around the player...for 50 spaces each way
-    //a 2d array of tiles, when you move, pop or shift from one side
-    //then push or unshift new tiles....
-    //each tile has a position... denoting it's center???
+    // tiles = updateTiles(camera.position, tiles)
 // //////////
+
 
 
     //Just put main loop in here...
@@ -149,7 +143,7 @@ tick()
 
 
 
-
+///////////////////////////////////////////////////////////
 let consoleTest = new ConsoleObject();
 scene.add(consoleTest.mesh)
 
@@ -158,6 +152,8 @@ scene.add(consoleTest.mesh)
 let consoleTest2 = new ConsoleObject();
 scene.add(consoleTest2.mesh)
 consoleTest2.mesh.position.z = -4
+///////////////////////////////////////////////////////
+
 
 
 
@@ -250,3 +246,160 @@ function updateTiles(cameraPosition, tiles, tileGenerateDistance = 20){
 
     return tiles;
 }
+
+
+
+
+
+
+
+
+
+
+import { FontLoader } from './myFontLoader.js'    //only exists locally in src file, not to be found elsewhere....
+import { TextGeometry } from './TextGeometry.js'  //only exists locally in src file, not to be found elsewhere...
+
+
+
+//Load font and return a promise
+const myPromise = new Promise((resolve, reject) =>{
+    const loader = new FontLoader();
+
+    loader.load(
+        'font.json', //somehow this resolves to the static folder, with or without the ./
+    
+        // onLoad callback
+        function ( font ) {
+            resolve(font)
+        },
+    
+        // onError callback
+        function ( err ) {
+            console.log( 'An error happened' );
+        }
+    )
+})
+
+//when promise fullfills, start the api loop, with the loaded font
+myPromise.then((resFont) =>{
+
+    //make the list of crypto names
+    let list = []
+    fetch('https://api.coincap.io/v2/assets',
+    {method: 'GET', redirect: 'follow'})
+    .then((response) => {
+        return response.json();
+    })
+    .then((result) => {
+        let info = result.data;
+        for(let n of info){
+            list.push(n.id);
+        }
+
+        return list;
+    })
+    .then((list) =>{
+        //begin the main api loop
+        apiLoop(list, resFont);
+    })
+    .catch((err) => {
+        console.log("Could not load list, error: ", err);
+    })
+})
+
+//at regular intervals, this loop recursively calls the apiCall for the next item in the list
+function apiLoop(list, font, index = 0) {
+    setTimeout(() => {
+
+        apiCall(list[index] , font);
+            //api callback funtion....loadOrUpdateConsoles
+
+        //increment the list and loop it back to beggining
+        index = ++index % (list.length - 1);
+        console.log(index, list[index])
+
+        //calls itself, to set a new timeout
+        apiLoop(list, font, index);
+    }, 500)
+}
+
+//sends an api call to get the value of the crypto coin 'name'
+function apiCall(name, font){
+    fetch(`https://api.coincap.io/v2/assets/${name}`,
+    {method: 'GET', redirect: 'follow'})
+    .then((response) =>{
+        return response.json()
+    })
+    .then((result) =>{
+        let price = result.data.priceUsd;
+
+        loadOrUpdateConsoles(name, price, font)
+    })
+}
+
+let consoleList = []
+//uses the name and value of the to either spawn a new console object or update the hologram on one of them.
+function loadOrUpdateConsoles(name, value, font){
+    console.log("You made it here!!! ", name, value)
+
+//if the consoleObject doesn't already exist.
+
+    //add new console.  add mesh to scene.  the animation starts...
+    let newConsole = new ConsoleObject(name)
+    consoleList.push( newConsole )
+    scene.add(newConsole.mesh)
+
+    //make new hologram object
+    let newHologram = new HologramObject(name, value, font);
+    newConsole.child = newHologram;
+    scene.add(newHologram.mesh)
+
+
+
+
+//or
+    //load hologram text geometry
+    //replace object geometry with new geometry
+
+}
+
+
+
+
+const textMaterial = new THREE.MeshStandardMaterial()
+textMaterial.color = new THREE.Color(0x00ff00)
+
+
+
+
+
+// const textGeo = new TextGeometry( 'ashsdha..', {
+//     font: res,
+//     size: 250,
+//     height: 70,
+//     curveSegments: 12,
+//     bevelEnabled: true,
+//     bevelThickness: 10,
+//     bevelSize: 8,
+//     bevelOffset: 0,
+//     bevelSegments: 5
+// } );
+
+// // Mesh
+// const text = new THREE.Mesh(textGeo,textMaterial)
+// scene.add(text)
+
+// text.scale.set(.0025,.0025,.0025)
+
+
+
+
+
+//load floor
+//load console mesh
+
+
+
+
+
+
