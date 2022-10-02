@@ -15,8 +15,7 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-// Objects
-const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
+
 
 // Materials
 const material = new THREE.MeshStandardMaterial()
@@ -25,10 +24,7 @@ material.color = new THREE.Color(0xff0000)
 material.transparent = true;
 material.opacity = .2
 
-// Mesh
-const sphere = new THREE.Mesh(geometry,material)
-scene.add(sphere)
-sphere.position.set(-1, .5, 0)
+
 
 // Lights
 const pointLight = new THREE.PointLight(0xffffff, 1)
@@ -107,11 +103,7 @@ const clock = new THREE.Clock()
 
 const tick = () =>
 {
-
     const elapsedTime = clock.getElapsedTime()
-
-    // Update objects
-    sphere.rotation.y = .5 * elapsedTime
 
     // Update Orbital Controls
     controls.update()
@@ -119,20 +111,9 @@ const tick = () =>
     // Render
     renderer.render(scene, camera)
 
-// /////////
-    // tiles = updateTiles(camera.position, tiles)
-// //////////
-
-
-
-    //Just put main loop in here...
-    //every time interval, make a call to the next in the list
-    //for its callback, use an update function....
-
-    //if the object doesn't exist, spawn it in and add it to scene.
-    //if it does exist, just update it???
-
-
+/////////
+    tiles = updateTiles(camera.position, tiles)
+//////////
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
@@ -286,7 +267,12 @@ myPromise.then((resFont) =>{
         return list;
     })
     .then((list) =>{
-        //begin the main api loop
+        //begin the main api loop'
+
+        ////////temp//////////!!!!!!!!!
+        list = list.slice(0,8);
+        /////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         apiLoop(list, resFont);
     })
     .catch((err) => {
@@ -299,14 +285,13 @@ function apiLoop(list, font, index = 0) {
     setTimeout(() => {
 
         apiCall(list[index] , font);
-            //api callback funtion....loadOrUpdateConsoles
 
         //increment the list and loop it back to beggining
         index = ++index % (list.length - 1);
-        console.log(index, list[index])
 
         //calls itself, to set a new timeout
         apiLoop(list, font, index);
+
     }, 500)
 }
 
@@ -324,30 +309,36 @@ function apiCall(name, font){
     })
 }
 
-let consoleList = []
+let consoleMap = new Map();
 //uses the name and value of the to either spawn a new console object or update the hologram on one of them.
 function loadOrUpdateConsoles(name, value, font){
-    console.log("You made it here!!! ", name, value)
 
+    console.log(name, "    :    ", value)/////////
 
+    // //if the consoleObject doesn't already exist.
+    if(consoleMap.get(name) === undefined){
 
-//if the consoleObject doesn't already exist.
+        //add new console.  add mesh to scene.  the animation starts...
+        let newConsole = new ConsoleObject(name , 0, consoleMap.size * -2)////////make the position of spawning dynamic
+        consoleMap.set( name , newConsole )
+        scene.add(newConsole.mesh)
 
-    //add new console.  add mesh to scene.  the animation starts...
-    let newConsole = new ConsoleObject(name , 0, consoleList.length * -2)////////make the position of spawning dynamic
-    consoleList.push( newConsole )
-    scene.add(newConsole.mesh)
+        //console init plays animation and then spawns a child HologramObject, then returns a promise
+        let newHologramPromise = newConsole.init(value, font)
 
-    //make new hologram object
-    let newHologram = newConsole.spawnChild(value, font);
-    scene.add(newHologram.mesh)
+        newHologramPromise.then((newHologram) => {
+            scene.add(newHologram.mesh)
+        })
 
+    } else {
 
+        let hologram = consoleMap.get(name).child;
 
-//or
-    //load hologram text geometry
-    //replace object geometry with new geometry
+        scene.remove(hologram.mesh)
+        hologram.updateValue(value)
+        scene.add(hologram.mesh)
 
+    }
 }
 
 

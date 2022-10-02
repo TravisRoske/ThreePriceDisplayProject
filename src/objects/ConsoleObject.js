@@ -1,8 +1,3 @@
-//This file will contain a class of display objects. With 3d meshes.
-//Its contructor will initiate the spawn animation, rising from the floor..
-//Somehow it will have to interact with the floor tile above it....
-
-
 import * as THREE from 'three'
 import { HologramObject } from '../HologramObject';
 
@@ -13,7 +8,6 @@ export class ConsoleObject {
         this.name = name;
         this.child = null;
         
-
 ///////////////////////////////////////////////trash
         const geometry = new THREE.BoxGeometry(1,1,1);
 
@@ -21,56 +15,50 @@ export class ConsoleObject {
         const material = new THREE.MeshStandardMaterial()
         material.color = new THREE.Color(0xff0000)
 
-        material.transparent = true;
-        material.opacity = .2
-
         // Mesh
         this.mesh = new THREE.Mesh(geometry,material)
 
         this.mesh.position.y = -2;
         this.mesh.position.x = positionX;
         this.mesh.position.z = positionZ;
-        this.startingAnimation();
+
 ////////////////////////////////////////////////
 
-
-
-        //load the model in
-        //add the model to scene???????????????????????????
-        //play the animation
         //once the animation is finished, spawn the hologram object
-
-
 
 
         // this.childHologram = new HologramObject(name, value)
 
     }
 
-    startingAnimation(){
 
-        //I have no idea if this is a good way to do this...considering I'm creating a seperate animation loop
-        const clock = new THREE.Clock()
+    init(value, font){
 
-        const tick = () => {
-            const elapsedTime = clock.getElapsedTime()
+        //returns a promise, that resolves as the new HologramObject child after the animation finishes
+        return new Promise((resolve, reject)=>{ 
+            //I have no idea if this is a good way to do this...considering I'm creating seperate animation loops
+            const clock = new THREE.Clock()
 
-            // Update objects
-            this.mesh.position.y = .4 * elapsedTime
-            
-            if(this.mesh.position.y < 1)
-                window.requestAnimationFrame(tick)
-            else 
-                return
-        }
+            const tick = () => {
+                const elapsedTime = clock.getElapsedTime()
 
-        tick()
+                // Update objects
+                this.mesh.position.y = .4 * elapsedTime
+                
+                if(this.mesh.position.y < 1){
+                    window.requestAnimationFrame(tick)
+                }
+                else {
+
+                    this.child = new HologramObject(this.name, value, font, this.mesh.position.x, this.mesh.position.z)
+
+                    resolve( this.child )
+                
+                }
+            }
+
+            tick()
+        })
     }
 
-    spawnChild(value, font){
-        console.log("this", this.name, this.positionX, this.positionZ)
-        this.child = new HologramObject(this.name, value, font, this.mesh.position.x, this.mesh.position.z)
-
-        return this.child;
-    }
 }

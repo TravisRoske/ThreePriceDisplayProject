@@ -3,18 +3,24 @@ import { FontLoader } from './myFontLoader.js'    //only exists locally in src f
 import { TextGeometry } from './TextGeometry.js'  //only exists locally in src file, not to be found elsewhere...
 
 
-
 // Text material
 const textMaterial = new THREE.MeshStandardMaterial()
 textMaterial.color = new THREE.Color(0x00ff00)
+textMaterial.transparent = true;
+textMaterial.opacity = .8
 
 
 export class HologramObject {
+
     constructor(name, value, font, positionX = 0, positionZ = 0){
         this.name = name;
+        this.value = value;
+        this.font = font;
+        this.positionX = positionX;
+        this.positionZ = positionZ;
 
-        console.log("making text object")
-        // make text object //
+
+
         const geometry = new TextGeometry( value, {
             font: font,
             size: 250,
@@ -26,14 +32,69 @@ export class HologramObject {
             bevelOffset: 0,
             bevelSegments: 5
         } );
+
         const textMesh = new THREE.Mesh(geometry,textMaterial)
         textMesh.scale.set( .0005, .0005, .0005 )
 
-        this.mesh = textMesh;
+        textMesh.position.y = 2;
+        textMesh.position.x = this.positionX - 1;
+        textMesh.position.z = this.positionZ;
 
-        this.mesh.position.y = 2;
-        this.mesh.position.x = positionX - 1;
-        this.mesh.position.z = positionZ;
+
+        this.mesh = textMesh
     }
+
+    makeTextObject(value){
+
+        const geometry = new TextGeometry( value, {
+            font: this.font,
+            size: 250,
+            height: 70,
+            curveSegments: 12,
+            bevelEnabled: true,
+            bevelThickness: 10,
+            bevelSize: 8,
+            bevelOffset: 0,
+            bevelSegments: 5
+        } );
+
+        const textMesh = new THREE.Mesh(geometry,textMaterial)
+        textMesh.scale.set( .0005, .0005, .0005 )
+
+        textMesh.position.y = 2;
+        textMesh.position.x = this.positionX - 1;
+        textMesh.position.z = this.positionZ;
+
+        return textMesh;
+
+    }
+
+    updateValue(value){
+        if(value != this.value){
+            
+            const geometry = new TextGeometry( value, {
+                font: this.font,
+                size: 250,
+                height: 70,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 10,
+                bevelSize: 8,
+                bevelOffset: 0,
+                bevelSegments: 5
+            } );
+
+            const textMesh = new THREE.Mesh(geometry,textMaterial)
+            textMesh.scale.set( .0005, .0005, .0005 )
+
+            textMesh.position.y = 2;
+            textMesh.position.x = this.positionX - 1;
+            textMesh.position.z = this.positionZ;
+
+
+            this.mesh = textMesh
+        }
+    }
+
 }
 
