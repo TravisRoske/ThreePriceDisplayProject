@@ -4,7 +4,7 @@ import { TextGeometry } from './TextGeometry.js'  //only exists locally in src f
 
 
 // Text material
-const textMaterial = new THREE.MeshStandardMaterial()
+const textMaterial = new THREE.MeshLambertMaterial()
 textMaterial.color = new THREE.Color(0x00ff00)
 textMaterial.transparent = true;
 textMaterial.opacity = .8
@@ -19,6 +19,8 @@ export class HologramObject {
         this.positionX = positionX;
         this.positionZ = positionZ;
 
+        this.light = new THREE.PointLight(0x00ff00, .4)
+        this.light.position.set(positionX - 1, 2 , positionZ + .15)
 
 
         const geometry = new TextGeometry( value, {
@@ -36,10 +38,7 @@ export class HologramObject {
         const textMesh = new THREE.Mesh(geometry,textMaterial)
         textMesh.scale.set( .0005, .0005, .0005 )
 
-        textMesh.position.y = 2;
-        textMesh.position.x = this.positionX - 1;
-        textMesh.position.z = this.positionZ;
-
+        textMesh.position.set(positionX - 1, 2, positionZ )
 
         this.mesh = textMesh
     }

@@ -27,19 +27,19 @@ material.opacity = .2
 
 
 // Lights
-const pointLight = new THREE.PointLight(0xffffff, 1)
+const pointLight = new THREE.PointLight(0xffffff, .2)
 pointLight.position.x = 4
 pointLight.position.y = 6
 pointLight.position.z = 8
 scene.add(pointLight)
 
-const pointLight2 = new THREE.PointLight(0xffffff, .8)
+const pointLight2 = new THREE.PointLight(0xffffff, .2)
 pointLight2.position.x = -4
 pointLight2.position.y = 6
 pointLight2.position.z = -8
 scene.add(pointLight2)
 
-const pointLight3 = new THREE.PointLight(0xffffff, .7)
+const pointLight3 = new THREE.PointLight(0xffffff, .2)
 pointLight3.position.x = 4
 pointLight3.position.y = 6
 pointLight3.position.z = -8
@@ -270,7 +270,7 @@ myPromise.then((resFont) =>{
         //begin the main api loop'
 
         ////////temp//////////!!!!!!!!!
-        list = list.slice(0,8);
+        list = list.slice(0,25);
         /////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         apiLoop(list, resFont);
@@ -327,7 +327,8 @@ function loadOrUpdateConsoles(name, value, font){
         let newHologramPromise = newConsole.init(value, font)
 
         newHologramPromise.then((newHologram) => {
-            scene.add(newHologram.mesh)
+            scene.add(newHologram.mesh);
+            scene.add(newHologram.light);
         })
 
     } else {
