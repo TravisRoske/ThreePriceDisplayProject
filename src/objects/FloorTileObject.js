@@ -3,6 +3,7 @@
 import * as THREE from 'three'
 
 
+//Maket these extend THREE.Mesh()?????
 export class FloorTileObject{
     constructor(posX, posZ){
         this.x = posX;

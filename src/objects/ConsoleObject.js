@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { HologramObject } from '../HologramObject';
 
 
+//Maket these extend THREE.Mesh()?????
 export class ConsoleObject {
 
     constructor(name, positionX = 0, positionZ = 0){
