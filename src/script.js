@@ -16,16 +16,6 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 
-
-// Materials
-const material = new THREE.MeshStandardMaterial()
-material.color = new THREE.Color(0xff0000)
-
-material.transparent = true;
-material.opacity = .2
-
-
-
 // Lights
 const pointLight = new THREE.PointLight(0xffffff, .2)
 pointLight.position.x = 8
