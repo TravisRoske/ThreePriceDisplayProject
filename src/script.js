@@ -212,11 +212,11 @@ function updateTiles(cameraPosition, tiles, tileGenerateDistance = 20){
         tiles.unshift(zRow)
     }
 
+    //if you moved positive on the z axis
+    //if you moved negative on the z axis
+
     return tiles;
 }
-
-
-
 
 
 
@@ -341,8 +341,3 @@ function loadOrUpdateConsoles(name, value, font){
 
     }
 }
-
-
-
-
-

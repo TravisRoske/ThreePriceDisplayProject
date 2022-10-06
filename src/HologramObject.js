@@ -10,6 +10,7 @@ textMaterial.transparent = true;
 textMaterial.opacity = .8
 
 
+
 //Maket these extend THREE.Mesh()?????
 export class HologramObject {
 
