@@ -28,20 +28,20 @@ material.opacity = .2
 
 // Lights
 const pointLight = new THREE.PointLight(0xffffff, .2)
-pointLight.position.x = 4
+pointLight.position.x = 8
 pointLight.position.y = 6
 pointLight.position.z = 8
 scene.add(pointLight)
 
 const pointLight2 = new THREE.PointLight(0xffffff, .2)
-pointLight2.position.x = -4
+pointLight2.position.x = -8
 pointLight2.position.y = 6
 pointLight2.position.z = -8
 scene.add(pointLight2)
 
 const pointLight3 = new THREE.PointLight(0xffffff, .2)
-pointLight3.position.x = 4
-pointLight3.position.y = 6
+pointLight3.position.x = 8
+pointLight3.position.y = 10
 pointLight3.position.z = -8
 scene.add(pointLight3)
 
@@ -213,6 +213,7 @@ function updateTiles(cameraPosition, tiles, tileGenerateDistance = 20){
     }
 
     //if you moved positive on the z axis
+
     //if you moved negative on the z axis
 
     return tiles;
