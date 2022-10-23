@@ -12,6 +12,7 @@ import { HologramObject } from './HologramObject'
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
+
 // Scene
 const scene = new THREE.Scene()
 
@@ -104,6 +105,7 @@ const tick = () =>
 /////////
     tiles = updateTiles(camera.position, tiles)
 //////////
+
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
